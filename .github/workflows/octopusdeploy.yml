@@ -69,7 +69,7 @@ jobs:
 
       - name: Build and push Docker image
         id: push
-        uses: docker/build-push-action@2ca78c6bec76527009825f31aae0532b4d40d820
+        uses: docker/build-push-action@91670ba5a4df99a24efff8637a78c83fd1b0f6b1
         with:
           context: .
           push: true
@@ -90,21 +90,21 @@ jobs:
 
     steps:
       - name: Log in to Octopus Deploy
-        uses: OctopusDeploy/login@e39e03d07630f363bdccd6c7ad4eb28e0ea8a184  #v2.0.0
+        uses: OctopusDeploy/login@d156cc2dd8d6f4592c3a0e54e8b51a4ea9198dd5  #v2.0.1
         with:
           server: '${{ env.OCTOPUS_URL }}'
           service_account_id: '${{ env.OCTOPUS_SERVICE_ACCOUNT }}'
 
       - name: Create Release
         id: create_release
-        uses: OctopusDeploy/create-release-action@4bd7d595da7f803e467d41c32fa0b5dbb9f222dc #v4.2.1
+        uses: OctopusDeploy/create-release-action@7e9e7d1c07fc6b2bd6a805f221a51939464e74d6 #v4.2.2
         with:
           project: '${{ env.OCTOPUS_PROJECT }}'
           space: '${{ env.OCTOPUS_SPACE }}'
           packages: '*:${{ needs.build.outputs.image_tag }}'
 
       - name: Deploy Release
-        uses: OctopusDeploy/deploy-release-action@a7630b7e2d308f6dec4339fdcd4b6a79b978380e #v4.2.3
+        uses: OctopusDeploy/deploy-release-action@555ae5a572e959b3d8f860246e1f6428de2c4da0 #v4.2.4
         with:
           project: '${{ env.OCTOPUS_PROJECT }}'
           space: '${{ env.OCTOPUS_SPACE }}'
