@@ -97,14 +97,14 @@ jobs:
 
       - name: Create Release
         id: create_release
-        uses: OctopusDeploy/create-release-action@7e9e7d1c07fc6b2bd6a805f221a51939464e74d6 #v4.2.2
+        uses: OctopusDeploy/create-release-action@4eaeba13bef87ec399ecac936e9f513758784694 #v4.2.3
         with:
           project: '${{ env.OCTOPUS_PROJECT }}'
           space: '${{ env.OCTOPUS_SPACE }}'
           packages: '*:${{ needs.build.outputs.image_tag }}'
 
       - name: Deploy Release
-        uses: OctopusDeploy/deploy-release-action@555ae5a572e959b3d8f860246e1f6428de2c4da0 #v4.2.4
+        uses: OctopusDeploy/deploy-release-action@aa8dcddeec810ce58cdf282a72738a8ed8ed65fd #v4.2.5
         with:
           project: '${{ env.OCTOPUS_PROJECT }}'
           space: '${{ env.OCTOPUS_SPACE }}'
