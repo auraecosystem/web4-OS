@@ -1,0 +1,88 @@
+# For most projects, this workflow file will not need changing; you simply need
+# to commit it to your repository.
+#
+# You may wish to alter this file to override the set of languages analyzed,
+# or to provide custom queries or build logic.
+#
+# ******** NOTE ********
+# We have attempted to detect the languages in your repository. Please check
+# the `language` matrix defined below to confirm you have the correct set of
+# supported CodeQL languages.
+#
+name: "CodeQL"
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ main ]
+  schedule:
+    - cron: '32 4 * * 0'
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+    permissions:
+      # only required for workflows in private repositories
+      actions: read
+      contents: read
+      # required for all workflows
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'python', 'ruby' ]
+        # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby' ]
+        # Learn more about CodeQL language support at https://git.io/codeql-language-support
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    # Initializes the CodeQL tools for scanning.
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v3
+      with:
+        languages: ${{ matrix.language }}
+        # If you wish to specify custom queries, you can do so here or in a config file.
+        # By default, queries listed here will override any specified in a config file.
+        # Prefix the list here with "+" to use these queries and those in the config file.
+        # queries: ./path/to/local/query, qubuhub-incs/gh-io/queries@main
+
+    # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
+    # If this step fails, then you should remove it and run the build manually (see below)
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v3
+
+    # ℹ️ Command-line programs to run using the OS shell.
+    # 📚 https://git.io/JvXDl
+
+    # ✏️ If the Autobuild fails above, remove it and uncomment the following three lines
+    #    and modify them (or add more) to build your code if your project
+    #    uses a compiled language
+
+    #- run: |
+    #   make bootstrap
+    #   make release
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v3
+      
+jobs:
+  repro:
+    runs-on: ubuntu-26.04   # same variable on ubuntu-24.04
+    steps:
+      - run: grep XDG_RUNTIME_DIR /etc/environment
+
+      - name: a session of another user gets the wrong XDG_RUNTIME_DIR
+        run: |
+          sudo useradd -u2000 -m -d/home/other -s/bin/bash other
+          sudo mkdir -p -m 0700 /home/other/.ssh
+          ssh-keygen -t ecdsa -N "" -f "$HOME/.ssh/other.key"
+          sudo cp "$HOME/.ssh/other.key.pub" /home/other/.ssh/authorized_keys
+          sudo chown -R other:other /home/other
+          ssh -t -t -o StrictHostKeyChecking=no -i "$HOME/.ssh/other.key" other@localhost -- \
+            'id -u; echo "XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR"; ls -ld /run/user/1001; systemctl --user show --property Version'
