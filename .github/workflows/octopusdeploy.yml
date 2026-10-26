@@ -90,21 +90,21 @@ jobs:
 
     steps:
       - name: Log in to Octopus Deploy
-        uses: OctopusDeploy/login@d156cc2dd8d6f4592c3a0e54e8b51a4ea9198dd5  #v2.0.1
+        uses: OctopusDeploy/login@5e2331a069ebc144b20ded22766dfce025dd9e73  #v2.0.2
         with:
           server: '${{ env.OCTOPUS_URL }}'
           service_account_id: '${{ env.OCTOPUS_SERVICE_ACCOUNT }}'
 
       - name: Create Release
         id: create_release
-        uses: OctopusDeploy/create-release-action@7e9e7d1c07fc6b2bd6a805f221a51939464e74d6 #v4.2.2
+        uses: OctopusDeploy/create-release-action@d01f523c3b9121a68f212f2f589fb00cb5709671 #v4.2.6
         with:
           project: '${{ env.OCTOPUS_PROJECT }}'
           space: '${{ env.OCTOPUS_SPACE }}'
           packages: '*:${{ needs.build.outputs.image_tag }}'
 
       - name: Deploy Release
-        uses: OctopusDeploy/deploy-release-action@555ae5a572e959b3d8f860246e1f6428de2c4da0 #v4.2.4
+        uses: OctopusDeploy/deploy-release-action@e203e12b01b65e0e452dbfe0004112d4c051cfec #v4.2.7
         with:
           project: '${{ env.OCTOPUS_PROJECT }}'
           space: '${{ env.OCTOPUS_SPACE }}'
