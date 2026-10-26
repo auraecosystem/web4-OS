@@ -1,0 +1,17 @@
+# Share the current project with the default provider (ngrok)
+ddev share
+
+# Share with cloudflared
+ddev share --provider=cloudflared
+
+# Share with cloudflared using a custom domain (named tunnel)
+ddev share --provider=cloudflared --provider-args="--tunnel my-tunnel --hostname mysite.example.com"
+
+# Share with ngrok, using domain `foo.ngrok-free.app`
+ddev share --provider-args="--domain foo.ngrok-free.app"
+
+# Share the current project using ngrok's basic-auth argument
+ddev share --provider-args="--basic-auth username:pass1234"
+
+# Share my-project with ngrok
+ddev share my-project
