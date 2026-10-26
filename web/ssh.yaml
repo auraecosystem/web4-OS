@@ -1,0 +1,14 @@
+# SSH into the current project’s web container
+ddev ssh
+
+# SSH into the current project’s database container
+ddev ssh -s db
+
+# SSH into the current project’s database container as root user
+ddev ssh -s db -u root
+
+# SSH into the web container for my-project
+ddev ssh my-project
+
+# SSH into the docroot of the current project’s web container
+ddev ssh -d /var/www/html
